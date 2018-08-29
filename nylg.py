@@ -23,7 +23,7 @@ class NylgSpider(scrapy.Spider):
         url = lists.xpath('ul/li[2]/a/@href').extract()
         time = getPresentTime()
         for i in range(len(title)):
-            if title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  or title[i].find('供需见面会')!=-1 and time == publishDate[i]:
+            if (title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  or title[i].find('供需见面会')!=-1) and time == publishDate[i]:
                 print(title[i])
                 item['title'] = title[i]
                 item['publishDate'] = publishDate[i]

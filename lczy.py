@@ -28,7 +28,7 @@ class LczySpider(scrapy.Spider):
         url = lists.xpath('a/@href').extract()
         time = getPresentTime()
         for i in range(len(title)):
-            if title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  or title[i].find("供需见面会")!=-1 and time[5:] == publishDate[i][0]:
+            if (title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  or title[i].find("供需见面会")!=-1) and time[5:] == publishDate[i][0]:
                 print(title[i])
                 item['title'] = title[i]
                 item['publishDate'] = publishDate[i]

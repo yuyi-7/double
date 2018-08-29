@@ -23,7 +23,7 @@ class WysSpider(scrapy.Spider):
         url = lists.xpath('li/a[1]/@href').extract()
         time = getPresentTime()
         for i in range(len(title)):
-            if title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  and time[:7] == publishDate[i]:
+            if (title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1)  and time[:7] == publishDate[i]:
                 print(title[i])
                 item['title'] = title[i]
                 item['publishDate'] = publishDate[i]
