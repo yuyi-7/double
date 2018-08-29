@@ -6,27 +6,27 @@ from double.GetPresentTime import getPresentTime
 
 from double.items import DoubleItem
 
-from lxml import etree  #xpath 解析网页
+from lxml import etree
 
-from selenium import webdriver  #使用selenium来爬取js渲染的网页
+from selenium import webdriver
 
-class HnkjSpider(scrapy.Spider):
-    nema = '湖南科技学院'
-    allowed_domains = ['hnse.edu.cn']
-    start_urls = ['http://job.huse.cn/module/jobfairs?type=']
+class JxnySpider(scrapy.Spider):
+    nema = '江西农业大学'
+    allowed_domains = ['jxny.edu.cn']
+    start_urls = ['http://jxndjy.jxau.edu.cn/module/jobfairs?type=']
 
     def parse(self,response):
         item = DoubleItem()
-        driver = webdriver.PhantomJS(service_log_path=r'../watchlog.log')  #初始化
-        driver.get('http://job.huse.cn/module/jobfairs?type=')   #爬取网页
-        html = etree.HTML(driver.page_source)  #转换格式
+        driver = webdriver.PhantomJS(service_log_path=r'../watchlog.log')
+        driver.get('http://jxndjy.jxau.edu.cn/module/jobfairs?type=')
+        html = etree.HTML(driver.page_source)
         #lists = response.xpath('//div[@class="newsBox"]')
         #print(lists)
-        title = html.xpath('//ul[@id="data_html"]/li/div/div[2]/p[1]/a/@title')
+        title = html.xpath('//div[@class="text-eps w240"]/@title')
         print(title)
-        publishDate = html.xpath('//ul[@id="data_html"]/li/div/div[3]/div/p[1]/text()')
+        publishDate = list(map(lambda x:x.strip() ,html.xpath('//table[@class="tb-pub-list"]/tbody/tr/td[2]/text()')))
         holdDate = ""
-        url = html.xpath('//ul[@id="data_html"]/li/div/div[2]/p[1]/a/@href')
+        #url = lists.xpath('ul/li[2]/a/@href').extract()
         time = getPresentTime()
         #print('运行成功')
         for i in range(len(title)):
@@ -35,7 +35,7 @@ class HnkjSpider(scrapy.Spider):
                 item['title'] = title[i]
                 item['publishDate'] = publishDate[i][:10]
                 item['holdDate'] = holdDate
-                item['url'] = 'http://job.huse.cn' + url[i]
+                item['url'] = 'http://jxndjy.jxau.edu.cn/module/jobfairs?type='
                 yield item
             else:
                 print('没有匹配')

@@ -10,32 +10,32 @@ from lxml import etree  #xpath 解析网页
 
 from selenium import webdriver  #使用selenium来爬取js渲染的网页
 
-class HnkjSpider(scrapy.Spider):
-    nema = '湖南科技学院'
-    allowed_domains = ['hnse.edu.cn']
-    start_urls = ['http://job.huse.cn/module/jobfairs?type=']
+class SrsfSpider(scrapy.Spider):
+    nema = '上饶师范学院'
+    allowed_domains = ['sru.jx.cn']
+    start_urls = ['http://zsjy.sru.jx.cn/html/srsfzscjyyw/index.html']
 
     def parse(self,response):
         item = DoubleItem()
         driver = webdriver.PhantomJS(service_log_path=r'../watchlog.log')  #初始化
-        driver.get('http://job.huse.cn/module/jobfairs?type=')   #爬取网页
+        driver.get('http://zsjy.sru.jx.cn/html/srsfzscjyyw/index.html')   #爬取网页
         html = etree.HTML(driver.page_source)  #转换格式
         #lists = response.xpath('//div[@class="newsBox"]')
         #print(lists)
-        title = html.xpath('//ul[@id="data_html"]/li/div/div[2]/p[1]/a/@title')
+        title = html.xpath('//span[@class="a-box"]/ul/li/a/text()')
         print(title)
-        publishDate = html.xpath('//ul[@id="data_html"]/li/div/div[3]/div/p[1]/text()')
+        publishDate = html.xpath('//span[@class="a-box"]/ul/li/span/text()')
         holdDate = ""
-        url = html.xpath('//ul[@id="data_html"]/li/div/div[2]/p[1]/a/@href')
+        url = html.xpath('//span[@class="a-box"]/ul/li/a/@href')
         time = getPresentTime()
         #print('运行成功')
         for i in range(len(title)):
-            if (title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  or title[i].find('供需见面会')!=-1) and time == publishDate[i][:10]:
+            if (title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  or title[i].find('供需见面会')!=-1) and time == publishDate[i]:
                 print(title[i])
                 item['title'] = title[i]
-                item['publishDate'] = publishDate[i][:10]
+                item['publishDate'] = publishDate[i]
                 item['holdDate'] = holdDate
-                item['url'] = 'http://job.huse.cn' + url[i]
+                item['url'] = 'http://zsjy.sru.jx.cn' + url[i]
                 yield item
             else:
                 print('没有匹配')

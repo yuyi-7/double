@@ -23,7 +23,7 @@ class SmSpider(scrapy.Spider):
         url = lists.xpath('li/a/@href').extract()
         time = getPresentTime()
         for i in range(len(title)):
-            if title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  or title[i].find('供需见面会')!=-1 and time == '20'+publishDate[i][1:9]:
+            if (title[i].find("招聘会") != -1 or title[i].find("双选会") != -1 or title[i].find("宣讲会") != -1  or title[i].find('供需见面会')!=-1) and time == '20'+publishDate[i][1:9]:
                 print(title[i])
                 item['title'] = title[i]
                 item['publishDate'] = '20'+publishDate[i][1:9]
